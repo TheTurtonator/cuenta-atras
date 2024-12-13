@@ -10,12 +10,19 @@
       background-color: #121212;
       color: #ffffff;
       display: flex;
+      flex-direction: column; /* Make elements stack vertically */
+      justify-content: center;
       align-items: center;
       height: 100vh;
       margin: 0;
       padding: 0;
       overflow: hidden;
       position: relative;
+    }
+
+    h1, h2 {
+      text-align: center;
+      margin: 10px 0;
     }
 
     .counter {
@@ -31,22 +38,13 @@
       z-index: 2;
     }
 
-   .counter p {
+    .counter p {
       margin: 10px 0;
       font-size: 1em;
       text-align: center; /* Center the content of the paragraph */
-      display: inline; /* Make sure it stays on a single line */
-       }
-    h1 {
-      font-size: 4em;
+      display: inline; /* Keep it on a single line */
     }
-    h2 {
-      font-size: 2em;
-    }
-    h1, h2 {
-      position: relative;
-    }
-    
+
     .snowflake {
       position: absolute;
       top: -5px;
@@ -54,8 +52,6 @@
       border-radius: 50%;
       opacity: 0.7;
       animation: fall linear infinite;
-      justify-content: center;
-      display: inline;
     }
 
     @keyframes fall {
@@ -133,8 +129,7 @@
       const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
       const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
 
-      // Use innerHTML to insert HTML content
-      document.getElementById("countdown").innerHTML = `${days} <p style="font-size: 16px;">Días</p> ${hours} <p style="font-size: 16px;">Horas</p> ${minutes} <p style="font-size: 16px;">Minutos</p> ${seconds} <p style="font-size: 16px;">Segundos</p>`;
+      document.getElementById("countdown").innerHTML = `${days} <p style="font-size: 16px; display: inline;">Días</p> ${hours} <p style="font-size: 16px; display: inline;">Horas</p> ${minutes} <p style="font-size: 16px; display: inline;">Minutos</p> ${seconds} <p style="font-size: 16px; display: inline;">Segundos</p>`;
     }
 
     // Initial setup
