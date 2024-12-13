@@ -39,7 +39,7 @@
 
     .snowflake {
       position: absolute;
-      top: -10px;
+      top: -5px; /* Start a few pixels below the top */
       background-color: white;
       border-radius: 50%;
       opacity: 0.7;
@@ -48,17 +48,8 @@
 
     @keyframes fall {
       to {
-        transform: translateY(100vh);
+        transform: translateY(100vh); /* Snowflakes fall through the screen */
       }
-    }
-
-    .snow-block {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      height: 15px;
-      background-color: #ffffff;
     }
 
     @media (min-width: 768px) {
@@ -81,14 +72,15 @@
     <p>Time Remaining Until 2 PM on December 20, 2024</p>
     <p id="countdown"></p>
   </div>
-  
-  <div class="snow-block"></div>
 
   <script>
-    // Snowflake generation
+    let snowflakes = []; // Array to hold all the snowflakes
+    const maxSnowflakes = 500; // Maximum number of snowflakes
+
+    // Function to create snowflakes
     function createSnowflakes() {
-      const numSnowflakes = 50; // Number of snowflakes
-      for (let i = 0; i < numSnowflakes; i++) {
+      // Only create a new snowflake if there are fewer than maxSnowflakes
+      if (snowflakes.length < maxSnowflakes) {
         const snowflake = document.createElement("div");
         snowflake.classList.add("snowflake");
 
@@ -104,22 +96,27 @@
         const duration = Math.random() * 5 + 5; // Snowflakes fall between 5s to 10s
         snowflake.style.animationDuration = `${duration}s`;
 
-        // Add snowflake to the body
+        // Add snowflake to the body and to the snowflakes array
         document.body.appendChild(snowflake);
+        snowflakes.push(snowflake);
       }
     }
 
-    // Remove snowflakes when they touch the snow block
-    function checkSnowflakes() {
-      const snowflakes = document.querySelectorAll(".snowflake");
-      snowflakes.forEach(snowflake => {
-        const snowflakeRect = snowflake.getBoundingClientRect();
-        const snowBlockRect = document.querySelector(".snow-block").getBoundingClientRect();
+    // Function to update the snowflakes' positions and remove them if they reach the bottom
+    function updateSnowflakes() {
+      for (let i = 0; i < snowflakes.length; i++) {
+        const snowflake = snowflakes[i];
 
-        if (snowflakeRect.bottom >= snowBlockRect.top) {
+        // Get the current position of the snowflake
+        const rect = snowflake.getBoundingClientRect();
+
+        // If snowflake reaches the bottom of the screen, remove it
+        if (rect.bottom >= window.innerHeight) {
           snowflake.remove();
+          snowflakes.splice(i, 1); // Remove the snowflake from the array
+          i--; // Adjust the index after removal
         }
-      });
+      }
     }
 
     // Update countdown timer
@@ -133,19 +130,19 @@
       // Calculate time difference
       const timeDifference = targetDate - currentDate;
 
-      // Convert time difference to days, hours, and seconds
+      // Convert time difference to days, hours, minutes, and seconds
       const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
       const hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const seconds = Math.floor((timeDifference % (1000 * 60 * 60)) / 1000);
+      const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
 
       // Display the result
-      document.getElementById("countdown").textContent = `${days} Days, ${hours} Hours, ${seconds} Seconds`;
+      document.getElementById("countdown").textContent = `${days} Days, ${hours} Hours, ${minutes} Minutes, ${seconds} Seconds`;
     }
 
     // Initial snowflake creation and animation
-    createSnowflakes();
     setInterval(createSnowflakes, 1000); // Create new snowflakes every second
-    setInterval(checkSnowflakes, 50); // Check for snowflakes touching the snow block every 50ms
+    setInterval(updateSnowflakes, 100); // Update snowflakes' positions every 100ms
 
     // Update countdown every second
     setInterval(updateCountdown, 1000);
