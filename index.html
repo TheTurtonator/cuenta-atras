@@ -75,7 +75,7 @@
 
   <script>
     let snowflakes = []; // Array to hold all the snowflakes
-    const maxSnowflakes = 500; // Maximum number of snowflakes
+    const maxSnowflakes = 250; // Maximum number of snowflakes
 
     // Function to create snowflakes
     function createSnowflakes() {
@@ -141,7 +141,7 @@
     }
 
     // Initial snowflake creation and animation
-    setInterval(createSnowflakes, 1000); // Create new snowflakes every second
+    setInterval(createSnowflakes, 1001); // Create new snowflakes every second
     setInterval(updateSnowflakes, 100); // Update snowflakes' positions every 100ms
 
     // Update countdown every second
