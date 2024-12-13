@@ -35,7 +35,7 @@
 
     .counter p {
       margin: 10px 0;
-      font-size: 1.5em;
+      font-size: 1em;
     }
 
     .snowflake {
@@ -69,8 +69,9 @@
   </style>
 </head>
 <body>
+  <h1>Cuentas Atrás</h1>
+  <h2>Tiempo para las Vacaciones</h2>
   <div class="counter">
-    <p>Time Remaining Until 2 PM on December 20, 2024</p>
     <p id="countdown"></p>
   </div>
 
@@ -121,12 +122,12 @@
       const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
       const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
 
-      document.getElementById("countdown").textContent = `${days} Days, ${hours} Hours, ${minutes} Minutes, ${seconds} Seconds`;
+      document.getElementById("countdown").textContent = `${days} <p style="font-size: 16px;">Días</p> ${hours} <p style="font-size: 16px;">Horas</p> ${minutes} <p style="font-size: 16px;">Minutos</p> ${seconds} <p style="font-size: 16px;">Segundos</p>`;
     }
 
     // Initial setup
     createSnowflakes(); // Create some initial snowflakes
-    setInterval(createSnowflakes, 1000); // Create a snowflake every second (lowered frequency)
+    setInterval(createSnowflakes, 10); // Create a snowflake every second (lowered frequency)
 
     // Start updating snowflakes positions
     requestAnimationFrame(updateSnowflakes);
