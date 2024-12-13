@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -39,7 +40,7 @@
 
     .snowflake {
       position: absolute;
-      top: -5px; /* Start a few pixels below the top */
+      top: -5px;
       background-color: white;
       border-radius: 50%;
       opacity: 0.7;
@@ -48,7 +49,7 @@
 
     @keyframes fall {
       to {
-        transform: translateY(100vh); /* Snowflakes fall through the screen */
+        transform: translateY(100vh);
       }
     }
 
@@ -74,75 +75,61 @@
   </div>
 
   <script>
-    let snowflakes = []; // Array to hold all the snowflakes
-    const maxSnowflakes = 275; // Maximum number of snowflakes
+    let snowflakes = [];
+    const maxSnowflakes = 100; // Reduced number of snowflakes
 
     // Function to create snowflakes
     function createSnowflakes() {
-      // Only create a new snowflake if there are fewer than maxSnowflakes
       if (snowflakes.length < maxSnowflakes) {
         const snowflake = document.createElement("div");
         snowflake.classList.add("snowflake");
-
-        // Randomize snowflake size and starting position
-        const size = Math.random() * 5 + 2; // Snowflakes between 2px and 7px
+        const size = Math.random() * 5 + 2;
         snowflake.style.width = `${size}px`;
         snowflake.style.height = `${size}px`;
-
         const leftPosition = Math.random() * window.innerWidth;
         snowflake.style.left = `${leftPosition}px`;
-
-        // Set random animation duration for the snowflake
-        const duration = Math.random() * 5 + 5; // Snowflakes fall between 5s to 10s
+        const duration = Math.random() * 5 + 5;
         snowflake.style.animationDuration = `${duration}s`;
-
-        // Add snowflake to the body and to the snowflakes array
         document.body.appendChild(snowflake);
         snowflakes.push(snowflake);
       }
     }
 
-    // Function to update the snowflakes' positions and remove them if they reach the bottom
+    // Function to update snowflakes using requestAnimationFrame for smoother updates
     function updateSnowflakes() {
-      for (let i = 0; i < snowflakes.length; i++) {
-        const snowflake = snowflakes[i];
-
-        // Get the current position of the snowflake
+      snowflakes = snowflakes.filter(snowflake => {
         const rect = snowflake.getBoundingClientRect();
-
-        // If snowflake reaches the bottom of the screen, remove it
         if (rect.bottom >= window.innerHeight) {
           snowflake.remove();
-          snowflakes.splice(i, 1); // Remove the snowflake from the array
-          i--; // Adjust the index after removal
+          return false;
         }
-      }
+        return true;
+      });
+
+      // Continue the animation loop
+      requestAnimationFrame(updateSnowflakes);
     }
 
     // Update countdown timer
     function updateCountdown() {
-      // Current time in Spain (Iberian Peninsula)
       const currentDate = new Date();
-      
-      // Target date: 2 PM on December 20, 2024
       const targetDate = new Date("2024-12-20T14:00:00+01:00");
-
-      // Calculate time difference
       const timeDifference = targetDate - currentDate;
 
-      // Convert time difference to days, hours, minutes, and seconds
       const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
       const hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
       const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
       const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
 
-      // Display the result
       document.getElementById("countdown").textContent = `${days} Days, ${hours} Hours, ${minutes} Minutes, ${seconds} Seconds`;
     }
 
-    // Initial snowflake creation and animation
-    setInterval(createSnowflakes, 100); // Create new snowflakes every second
-    setInterval(updateSnowflakes, 100); // Update snowflakes' positions every 100ms
+    // Initial setup
+    createSnowflakes(); // Create some initial snowflakes
+    setInterval(createSnowflakes, 1000); // Create a snowflake every second (lowered frequency)
+
+    // Start updating snowflakes positions
+    requestAnimationFrame(updateSnowflakes);
 
     // Update countdown every second
     setInterval(updateCountdown, 1000);
